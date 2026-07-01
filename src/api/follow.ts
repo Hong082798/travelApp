@@ -1,5 +1,5 @@
 import request from "./index";
-import type { PageResult } from "./scenic";
+import type { PageResult } from "./types";
 import type { TravelNoteVO } from "./note";
 
 export interface FollowUserVO {

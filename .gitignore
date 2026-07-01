@@ -1,6 +1,8 @@
 # OSX
 #
 .DS_Store
+.AppleDouble
+.LSOverride
 
 # Xcode
 #
@@ -39,7 +41,18 @@ local.properties
 #
 node_modules/
 npm-debug.log
+yarn-debug.log
 yarn-error.log
+.pnp.*
+.pnp/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
 
 # fastlane
 #
@@ -66,6 +79,24 @@ yarn-error.log
 # testing
 /coverage
 
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.history/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # Yarn
 .yarn/*
 !.yarn/patches
@@ -73,3 +104,7 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# React Native generated
+.expo/
+dist/

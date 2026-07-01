@@ -2,21 +2,29 @@ import React, { useState, useEffect, useCallback } from 'react'
 import {
   View,
   Text,
+  Image,
   FlatList,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
-  SafeAreaView
+  SafeAreaView,
+  Dimensions,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import type { CompositeNavigationProp } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { getNotePage } from '../../api/note'
 import type { TravelNoteVO } from '../../api/note'
 import type { RootStackParamList } from '../../navigation'
+import type { MainTabParamList } from '../../navigation/MainTabs'
 import { getFollowingFeed } from '../../api/follow'   // ← 新增
 
-type NoteListNavigationProp = NativeStackNavigationProp<RootStackParamList, 'NoteList'>
+type NoteListNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabParamList, 'NoteList'>,
+  NativeStackNavigationProp<RootStackParamList>
+>
 
 // 格式化时间
 const formatDate = ( dateString: string ) => {
@@ -26,6 +34,9 @@ const formatDate = ( dateString: string ) => {
   const day = date.getDate().toString().padStart( 2, '0' )
   return `${ year }-${ month }-${ day }`
 }
+
+const GRID_GAP = 12
+const CARD_WIDTH = ( Dimensions.get( 'window' ).width - GRID_GAP * 3 ) / 2
 
 export default function NoteListScreen() {
 
@@ -111,31 +122,44 @@ export default function NoteListScreen() {
       <TouchableOpacity
           style = { styles.card }
           onPress = { () => navigation.navigate( 'NoteDetail', { id: item.id } ) }
-          activeOpacity = { 0.8 }
+          activeOpacity = { 0.85 }
       >
+        {/* 封面图 */ }
+        <View style = { styles.imageWrap }>
+          { item.coverImage ? (
+              <Image source = { { uri: item.coverImage } } style = { styles.coverImage } />
+          ) : (
+              <View style = { [ styles.coverImage, styles.coverPlaceholder ] }>
+                <Text style = { styles.placeholderEmoji }>📝</Text>
+              </View>
+          ) }
+          <View style = { styles.likeOverlay }>
+            <Text style = { styles.likeOverlayText }>❤️ { item.likeCount }</Text>
+          </View>
+        </View>
+
         {/* 标题 */ }
         <Text style = { styles.title } numberOfLines = { 2 }>{ item.title }</Text>
 
         {/* 作者信息行 */ }
         <View style = { styles.authorRow }>
           <View style = { styles.avatar }>
-            <Text style = { styles.avatarText }>
-              { item.authorNickname?.charAt( 0 ) ?? '?' }
-            </Text>
+            { item.authorAvatar ? (
+                <Image source = { { uri: item.authorAvatar } } style = { styles.avatarImage } />
+            ) : (
+                <Text style = { styles.avatarText }>
+                  { item.authorNickname?.charAt( 0 ) ?? '?' }
+                </Text>
+            ) }
           </View>
-          <Text style = { styles.nickname }>{ item.authorNickname }</Text>
+          <Text style = { styles.nickname } numberOfLines = { 1 }>{ item.authorNickname }</Text>
           <Text style = { styles.date }>{ formatDate( item.createTime ) }</Text>
-        </View>
-
-        {/* 底部统计行 */ }
-        <View style = { styles.statsRow }>
-          <Text style = { styles.stat }>❤️ { item.likeCount }</Text>
         </View>
       </TouchableOpacity>
   )
 
   return (
-      <SafeAreaView>
+      <SafeAreaView style = { styles.container }>
 
         {/* 顶部切换标签 */ }
         <View style = { styles.tabBar }>
@@ -164,9 +188,11 @@ export default function NoteListScreen() {
             data = { data }
             keyExtractor = { ( item ) => String( item.id ) }
             renderItem = { renderItem }
+            numColumns = { 2 }
+            columnWrapperStyle = { styles.columnWrapper }
             contentContainerStyle = { styles.list }
             refreshControl = {
-              <RefreshControl refreshing = { refreshing } onRefresh = { handleRefresh } />
+              <RefreshControl refreshing = { refreshing } onRefresh = { handleRefresh } tintColor = "#1890ff" />
             }
             onEndReached = { handleLoadMore }
             onEndReachedThreshold = { 0.2 }
@@ -174,7 +200,10 @@ export default function NoteListScreen() {
             ListEmptyComponent = {
               !loading ? (
                   <View style = { styles.empty }>
-                    <Text style = { styles.emptyText }>暂无游记</Text>
+                    <Text style = { styles.emptyEmoji }>🧳</Text>
+                    <Text style = { styles.emptyText }>
+                      { activeTab === 'recommend' ? '暂无游记' : '还没有关注的人发布游记' }
+                    </Text>
                   </View>
               ) : null
             }
@@ -184,63 +213,98 @@ export default function NoteListScreen() {
 }
 
 const styles = StyleSheet.create( {
+  container: { flex: 1, backgroundColor: '#f5f6f8' },
   list: {
-    padding: 16,
+    padding: GRID_GAP,
+  },
+  columnWrapper: {
+    justifyContent: 'space-between',
   },
   card: {
+    width: CARD_WIDTH,
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    marginBottom: GRID_GAP,
+    padding: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.05,
     shadowRadius: 6,
-    elevation: 2,
+    elevation: 1,
+  },
+  imageWrap: {
+    width: '100%',
+    aspectRatio: 0.85,
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  coverImage: {
+    width: '100%',
+    height: '100%',
+  },
+  coverPlaceholder: {
+    backgroundColor: '#eef1f5',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderEmoji: {
+    fontSize: 34,
+  },
+  likeOverlay: {
+    position: 'absolute',
+    right: 6,
+    bottom: 6,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderRadius: 10,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+  },
+  likeOverlayText: {
+    fontSize: 11,
+    color: '#fff',
+    fontWeight: '500',
   },
   title: {
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1a1a1a',
-    lineHeight: 24,
-    marginBottom: 12,
+    lineHeight: 19,
+    marginBottom: 8,
+    paddingHorizontal: 2,
   },
   authorRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    paddingHorizontal: 2,
   },
   avatar: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: '#1890ff',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 8,
+    marginRight: 6,
+    overflow: 'hidden',
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
   },
   avatarText: {
     color: '#fff',
-    fontSize: 13,
+    fontSize: 11,
     fontWeight: '600',
   },
   nickname: {
-    fontSize: 13,
-    color: '#555',
+    fontSize: 12,
+    color: '#666',
     flex: 1,
   },
   date: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#bbb',
-  },
-  statsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  stat: {
-    fontSize: 13,
-    color: '#999',
-    marginRight: 16,
   },
   footer: {
     paddingVertical: 16,
@@ -251,15 +315,18 @@ const styles = StyleSheet.create( {
     color: '#bbb',
   },
   empty: {
+    width: '100%',
     paddingTop: 100,
     alignItems: 'center',
+  },
+  emptyEmoji: {
+    fontSize: 40,
+    marginBottom: 8,
   },
   emptyText: {
     fontSize: 15,
     color: '#bbb',
   },
-
-  container: { flex: 1, backgroundColor: '#f5f5f5' },   // ← 新增
   tabBar: {
     flexDirection: 'row',
     backgroundColor: '#fff',

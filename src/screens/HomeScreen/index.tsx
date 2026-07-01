@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import {
-  View, Text, FlatList, TouchableOpacity, StyleSheet,
+  View, Text, Image, FlatList, TouchableOpacity, StyleSheet,
   ActivityIndicator, RefreshControl, SafeAreaView
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import type { CompositeNavigationProp } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { getScenicPage } from '../../api/scenic'
 import type { ScenicSpot } from '../../api/scenic'
 import type { RootStackParamList } from '../../navigation'
+import type { MainTabParamList } from '../../navigation/MainTabs'
 
-type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>
+type HomeNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabParamList, '首页'>,
+  NativeStackNavigationProp<RootStackParamList>
+>
 
 export default function HomeScreen() {
   const navigation = useNavigation<HomeNavigationProp>()
@@ -85,20 +91,28 @@ export default function HomeScreen() {
       <TouchableOpacity
           style = { styles.card }
           onPress = { () => navigation.navigate( 'ScenicDetail', { id: item.id, categoryName: item.categoryName } ) }
-          activeOpacity = { 0.8 }
+          activeOpacity = { 0.85 }
       >
-        <View style = { styles.cardHeader }>
-          <Text style = { styles.cardTitle } numberOfLines = { 1 }>{ item.name }</Text>
+        <View style = { styles.cardImageWrap }>
+          { item.coverImage ? (
+              <Image source = { { uri: item.coverImage } } style = { styles.cardImage } />
+          ) : (
+              <View style = { [ styles.cardImage, styles.cardImagePlaceholder ] }>
+                <Text style = { styles.placeholderEmoji }>🏞️</Text>
+              </View>
+          ) }
           <View style = { styles.badge }>
-            <Text style = { styles.badgeText }>{ item.categoryName }</Text>
+            <Text style = { styles.badgeText } numberOfLines = { 1 }>{ item.categoryName }</Text>
           </View>
         </View>
 
-        <Text style = { styles.cardDesc } numberOfLines = { 2 }>{ item.description }</Text>
-
-        <View style = { styles.cardFooter }>
-          <Text style = { styles.address } numberOfLines = { 1 }>📍 { item.address }</Text>
-          <View style = { styles.rightInfo }>
+        <View style = { styles.cardBody }>
+          <Text style = { styles.cardTitle } numberOfLines = { 1 }>{ item.name }</Text>
+          <Text style = { styles.cardDesc } numberOfLines = { 2 }>{ item.description }</Text>
+          <View style = { styles.cardFooter }>
+            <Text style = { styles.address } numberOfLines = { 1 }>📍 { item.address }</Text>
+          </View>
+          <View style = { styles.cardBottomRow }>
             <Text style = { styles.score }>⭐ { item.score }</Text>
             <Text style = { styles.price }>
               { Number( item.ticketPrice ) === 0 ? '免费' : `¥${ item.ticketPrice }` }
@@ -109,14 +123,27 @@ export default function HomeScreen() {
   )
 
   return (
-      <SafeAreaView style = { { flex: 1 } }>
-        {/* 顶部导航入口 */ }
+      <SafeAreaView style = { styles.container }>
+        {/* 顶部标题 */ }
+        <View style = { styles.header }>
+          <Text style = { styles.headerTitle }>发现</Text>
+          <Text style = { styles.headerSubtitle }>找到下一个想去的地方</Text>
+        </View>
+
+        {/* 游记社区入口 */ }
         <TouchableOpacity
             style = { styles.noteEntry }
             onPress = { () => navigation.navigate( 'NoteList' ) }
-            activeOpacity = { 0.8 }
+            activeOpacity = { 0.85 }
         >
-          <Text style = { styles.noteEntryText }>📖 旅行游记社区 →</Text>
+          <View style = { styles.noteEntryIcon }>
+            <Text style = { styles.noteEntryIconText }>📖</Text>
+          </View>
+          <View style = { styles.noteEntryTextWrap }>
+            <Text style = { styles.noteEntryTitle }>旅行游记社区</Text>
+            <Text style = { styles.noteEntrySubtitle }>看看大家都去了哪里</Text>
+          </View>
+          <Text style = { styles.noteEntryArrow }>›</Text>
         </TouchableOpacity>
 
         {/* 景点列表 */ }
@@ -126,7 +153,7 @@ export default function HomeScreen() {
             renderItem = { renderItem }
             contentContainerStyle = { styles.list }
             refreshControl = {
-              <RefreshControl refreshing = { refreshing } onRefresh = { handleRefresh } />
+              <RefreshControl refreshing = { refreshing } onRefresh = { handleRefresh } tintColor = "#1890ff" />
             }
             onEndReached = { handleLoadMore }
             onEndReachedThreshold = { 0.2 }
@@ -134,6 +161,7 @@ export default function HomeScreen() {
             ListEmptyComponent = {
               !loading ? (
                   <View style = { styles.empty }>
+                    <Text style = { styles.emptyEmoji }>🗺️</Text>
                     <Text style = { styles.emptyText }>暂无景点数据</Text>
                   </View>
               ) : null
@@ -144,73 +172,110 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create( {
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f6f8',
+  },
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  headerTitle: {
+    fontSize: 26,
+    fontWeight: '700',
+    color: '#1a1a1a',
+  },
+  headerSubtitle: {
+    fontSize: 13,
+    color: '#999',
+    marginTop: 2,
+  },
   list: {
     padding: 16,
+    paddingTop: 12,
   },
   card: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    borderRadius: 14,
+    marginBottom: 14,
+    flexDirection: 'row',
+    overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
-    shadowRadius: 6,
+    shadowRadius: 8,
     elevation: 2,
   },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 8,
+  cardImageWrap: {
+    width: 108,
+    height: 132,
   },
-  cardTitle: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    flex: 1,
-    marginRight: 8,
+  cardImage: {
+    width: '100%',
+    height: '100%',
+  },
+  cardImagePlaceholder: {
+    backgroundColor: '#eef1f5',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderEmoji: {
+    fontSize: 30,
   },
   badge: {
-    backgroundColor: '#e6f4ff',
+    position: 'absolute',
+    left: 8,
+    top: 8,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 4,
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     paddingVertical: 2,
+    maxWidth: '80%',
   },
   badgeText: {
-    fontSize: 12,
-    color: '#1890ff',
+    fontSize: 11,
+    color: '#fff',
+    fontWeight: '500',
+  },
+  cardBody: {
+    flex: 1,
+    padding: 12,
+    justifyContent: 'space-between',
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1a1a1a',
   },
   cardDesc: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
-    marginBottom: 12,
+    fontSize: 13,
+    color: '#888',
+    lineHeight: 18,
+    marginTop: 4,
   },
   cardFooter: {
+    marginTop: 6,
+  },
+  address: {
+    fontSize: 12,
+    color: '#aaa',
+  },
+  cardBottomRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  address: {
-    fontSize: 13,
-    color: '#999',
-    flex: 1,
-    marginRight: 8,
-  },
-  rightInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    marginTop: 6,
   },
   score: {
     fontSize: 13,
     color: '#fa8c16',
+    fontWeight: '500',
   },
   price: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#f5222d',
-    fontWeight: '600',
+    fontWeight: '700',
   },
   footer: {
     paddingVertical: 16,
@@ -224,20 +289,56 @@ const styles = StyleSheet.create( {
     paddingTop: 100,
     alignItems: 'center',
   },
+  emptyEmoji: {
+    fontSize: 40,
+    marginBottom: 8,
+  },
   emptyText: {
     fontSize: 15,
     color: '#bbb',
   },
   noteEntry: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    marginHorizontal: 16,
+    marginTop: 12,
+    padding: 12,
+    borderRadius: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 1,
   },
-  noteEntryText: {
+  noteEntryIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: '#e6f4ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  noteEntryIconText: {
+    fontSize: 22,
+  },
+  noteEntryTextWrap: {
+    flex: 1,
+  },
+  noteEntryTitle: {
     fontSize: 15,
-    color: '#1890ff',
-    fontWeight: '500',
+    color: '#1a1a1a',
+    fontWeight: '600',
+  },
+  noteEntrySubtitle: {
+    fontSize: 12,
+    color: '#999',
+    marginTop: 2,
+  },
+  noteEntryArrow: {
+    fontSize: 22,
+    color: '#ccc',
+    marginLeft: 4,
   },
 } )
