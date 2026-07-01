@@ -10,6 +10,7 @@ import FollowListScreen from '../screens/FollowListScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import MainTabs from './MainTabs';
 import { navigationRef } from './navigationRef';
+import EntertainmentDetailScreen from '../screens/EntertainmentDetailScreen';
 
 // 定义路由表的类型
 export type RootStackParamList = {
@@ -28,39 +29,44 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function Navigation() {
   return (
-    <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator initialRouteName={'Login'}>
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="MainTabs"
-          component={MainTabs}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ScenicDetail"
-          component={ScenicDetailScreen}
-          options={{ title: '景点详情' }}
-        />
-        <Stack.Screen
-          name="NoteDetail"
-          component={NoteDetailScreen}
-          options={{ title: '游记详情' }}
-        />
-        <Stack.Screen
-          name="UserProfile"
-          component={UserProfileScreen}
-          options={{ title: '用户主页' }}
-        />
-        <Stack.Screen
-          name="FollowList"
-          component={FollowListScreen}
-          options={{ title: '' }} // 标题由页面内 setOptions 动态设置
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer ref = { navigationRef }>
+        <Stack.Navigator initialRouteName = { 'Login' }>
+          <Stack.Screen
+              name = "Login"
+              component = { LoginScreen }
+              options = { { headerShown: false } }
+          />
+          <Stack.Screen
+              name = "MainTabs"
+              component = { MainTabs }
+              options = { { headerShown: false } }
+          />
+          <Stack.Screen
+              name = "ScenicDetail"
+              component = { ScenicDetailScreen }
+              options = { { title: '景点详情' } }
+          />
+          <Stack.Screen
+              name = "NoteDetail"
+              component = { NoteDetailScreen }
+              options = { { title: '游记详情' } }
+          />
+          <Stack.Screen
+              name = "UserProfile"
+              component = { UserProfileScreen }
+              options = { { title: '用户主页' } }
+          />
+          <Stack.Screen
+              name = "FollowList"
+              component = { FollowListScreen }
+              options = { { title: '' } } // 标题由页面内 setOptions 动态设置
+          />
+          <Stack.Screen
+              name = "EntertainmentDetail"
+              component = { EntertainmentDetailScreen }
+              options = { { title: '玩乐详情' } }
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
   );
 }
