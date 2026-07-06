@@ -4,7 +4,7 @@ import HomeScreen from '../screens/HomeScreen'
 import NoteListScreen from '../screens/NoteListScreen'
 import EntertainmentScreen from '../screens/EntertainmentScreen'
 import ProfileScreen from '../screens/ProfileScreen'
-import { Text } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 
 // 底部 Tab 路由表类型
 export type MainTabParamList = {
@@ -16,22 +16,29 @@ export type MainTabParamList = {
 
 const Tab = createBottomTabNavigator<MainTabParamList>()
 
+const HomeTabIcon = () => <Text style = { styles.tabIcon }>🧭</Text>
+const NoteTabIcon = () => <Text style = { styles.tabIcon }>📖</Text>
+const EntertainmentTabIcon = () => <Text style = { styles.tabIcon }>🎟️</Text>
+const ProfileTabIcon = () => <Text style = { styles.tabIcon }>👤</Text>
+
 export default function MainTabs() {
   return (
       <Tab.Navigator
           screenOptions = { {
             headerShown: false,       // Tab 里的页面不显示 Tab 自己的 header（外层 Stack 的 header 管）
-            tabBarActiveTintColor: '#1890ff',
-            tabBarInactiveTintColor: '#999',
+            tabBarActiveTintColor: '#1F5C43',
+            tabBarInactiveTintColor: '#9B8C77',
             tabBarStyle: {
-              height: 56,
-              paddingBottom: 6,
-              paddingTop: 6,
-              borderTopColor: '#f0f0f0',
+              height: 62,
+              paddingBottom: 8,
+              paddingTop: 7,
+              backgroundColor: '#FFFDF8',
+              borderTopColor: '#E8DDC6',
+              borderTopWidth: 1,
             },
             tabBarLabelStyle: {
               fontSize: 11,
-              fontWeight: '500',
+              fontWeight: '700',
             },
           } }
       >
@@ -40,7 +47,7 @@ export default function MainTabs() {
             component = { HomeScreen }
             options = { {
               tabBarLabel: '首页',
-              tabBarIcon: ( { color } ) => <Text style = { { color, fontSize: 20 } }>🏠</Text>
+              tabBarIcon: HomeTabIcon,
             } }
         />
         <Tab.Screen
@@ -48,7 +55,7 @@ export default function MainTabs() {
             component = { NoteListScreen }
             options = { {
               tabBarLabel: '游记',
-              tabBarIcon: ( { color } ) => <Text style = { { color, fontSize: 20 } }>📝</Text>
+              tabBarIcon: NoteTabIcon,
             } }
         />
         <Tab.Screen
@@ -56,7 +63,7 @@ export default function MainTabs() {
             component = { EntertainmentScreen }
             options = { {
               tabBarLabel: '玩乐',
-              tabBarIcon: ( { color } ) => <Text style = { { color, fontSize: 20 } }>🎯</Text>
+              tabBarIcon: EntertainmentTabIcon,
             } }
         />
         <Tab.Screen
@@ -64,9 +71,15 @@ export default function MainTabs() {
             component = { ProfileScreen }
             options = { {
               tabBarLabel: '我的',
-              tabBarIcon: ( { color } ) => <Text style = { { color, fontSize: 20 } }>👤</Text>
+              tabBarIcon: ProfileTabIcon,
             } }
         />
       </Tab.Navigator>
   )
 }
+
+const styles = StyleSheet.create( {
+  tabIcon: {
+    fontSize: 20,
+  },
+} )

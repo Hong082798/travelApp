@@ -72,7 +72,7 @@ export default function HomeScreen() {
     if ( loading && data.length > 0 ) {
       return (
           <View style = { styles.footer }>
-            <ActivityIndicator size = "small" color = "#1890ff" />
+            <ActivityIndicator size = "small" color = "#1F5C43" />
           </View>
       )
     }
@@ -124,36 +124,47 @@ export default function HomeScreen() {
 
   return (
       <SafeAreaView style = { styles.container }>
-        {/* 顶部标题 */ }
         <View style = { styles.header }>
-          <Text style = { styles.headerTitle }>发现</Text>
-          <Text style = { styles.headerSubtitle }>找到下一个想去的地方</Text>
+          <View style = { styles.hero }>
+            <Text style = { styles.heroEyebrow }>CULTURAL JOURNEY</Text>
+            <Text style = { styles.headerTitle }>山河有约</Text>
+            <Text style = { styles.headerSubtitle }>发现城市周边的风景、人文与烟火气</Text>
+            <View style = { styles.heroStats }>
+              <View style = { styles.heroStatItem }>
+                <Text style = { styles.heroStatValue }>精选</Text>
+                <Text style = { styles.heroStatLabel }>文旅目的地</Text>
+              </View>
+              <View style = { styles.heroDivider } />
+              <View style = { styles.heroStatItem }>
+                <Text style = { styles.heroStatValue }>实时</Text>
+                <Text style = { styles.heroStatLabel }>门票与评分</Text>
+              </View>
+            </View>
+          </View>
         </View>
 
-        {/* 游记社区入口 */ }
         <TouchableOpacity
             style = { styles.noteEntry }
             onPress = { () => navigation.navigate( 'NoteList' ) }
             activeOpacity = { 0.85 }
         >
           <View style = { styles.noteEntryIcon }>
-            <Text style = { styles.noteEntryIconText }>📖</Text>
+            <Text style = { styles.noteEntryIconText }>册</Text>
           </View>
           <View style = { styles.noteEntryTextWrap }>
-            <Text style = { styles.noteEntryTitle }>旅行游记社区</Text>
-            <Text style = { styles.noteEntrySubtitle }>看看大家都去了哪里</Text>
+            <Text style = { styles.noteEntryTitle }>旅人手记</Text>
+            <Text style = { styles.noteEntrySubtitle }>从真实游记里找下一段路线灵感</Text>
           </View>
           <Text style = { styles.noteEntryArrow }>›</Text>
         </TouchableOpacity>
 
-        {/* 景点列表 */ }
         <FlatList
             data = { data }
             keyExtractor = { ( item ) => String( item.id ) }
             renderItem = { renderItem }
             contentContainerStyle = { styles.list }
             refreshControl = {
-              <RefreshControl refreshing = { refreshing } onRefresh = { handleRefresh } tintColor = "#1890ff" />
+              <RefreshControl refreshing = { refreshing } onRefresh = { handleRefresh } tintColor = "#1F5C43" />
             }
             onEndReached = { handleLoadMore }
             onEndReachedThreshold = { 0.2 }
@@ -174,49 +185,105 @@ export default function HomeScreen() {
 const styles = StyleSheet.create( {
   container: {
     flex: 1,
-    backgroundColor: '#f5f6f8',
+    backgroundColor: '#F6F1E8',
   },
   header: {
     paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 4,
+    paddingTop: 10,
+    paddingBottom: 2,
+  },
+  hero: {
+    backgroundColor: '#1F5C43',
+    borderRadius: 24,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 18,
+    overflow: 'hidden',
+    shadowColor: '#173B2D',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.18,
+    shadowRadius: 18,
+    elevation: 5,
+  },
+  heroEyebrow: {
+    fontSize: 11,
+    color: '#D9C79B',
+    fontWeight: '700',
+    letterSpacing: 0,
+    marginBottom: 8,
   },
   headerTitle: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#1a1a1a',
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#FFF9EE',
   },
   headerSubtitle: {
-    fontSize: 13,
-    color: '#999',
-    marginTop: 2,
+    fontSize: 14,
+    color: '#E8DDC6',
+    marginTop: 6,
+    lineHeight: 21,
+  },
+  heroStats: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    marginTop: 18,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,249,238,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,249,238,0.18)',
+  },
+  heroStatItem: {
+    minWidth: 86,
+  },
+  heroStatValue: {
+    color: '#FFF9EE',
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  heroStatLabel: {
+    color: '#D9C79B',
+    fontSize: 11,
+    marginTop: 3,
+  },
+  heroDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: 'rgba(255,249,238,0.2)',
+    marginHorizontal: 12,
   },
   list: {
     padding: 16,
-    paddingTop: 12,
+    paddingTop: 14,
+    paddingBottom: 24,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 14,
-    marginBottom: 14,
+    backgroundColor: '#FFFDF8',
+    borderRadius: 18,
+    marginBottom: 16,
     flexDirection: 'row',
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#E9DDC8',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.09,
+    shadowRadius: 16,
+    elevation: 3,
   },
   cardImageWrap: {
-    width: 108,
-    height: 132,
+    width: 124,
+    height: 150,
+    backgroundColor: '#D8C9AB',
   },
   cardImage: {
     width: '100%',
     height: '100%',
   },
   cardImagePlaceholder: {
-    backgroundColor: '#eef1f5',
+    backgroundColor: '#E8DDC6',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -227,39 +294,39 @@ const styles = StyleSheet.create( {
     position: 'absolute',
     left: 8,
     top: 8,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    backgroundColor: 'rgba(31,92,67,0.9)',
+    borderRadius: 12,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
     maxWidth: '80%',
   },
   badgeText: {
     fontSize: 11,
-    color: '#fff',
-    fontWeight: '500',
+    color: '#FFF9EE',
+    fontWeight: '700',
   },
   cardBody: {
     flex: 1,
-    padding: 12,
+    padding: 14,
     justifyContent: 'space-between',
   },
   cardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
+    fontSize: 17,
+    fontWeight: '800',
+    color: '#2A241D',
   },
   cardDesc: {
     fontSize: 13,
-    color: '#888',
-    lineHeight: 18,
-    marginTop: 4,
+    color: '#756B5E',
+    lineHeight: 19,
+    marginTop: 5,
   },
   cardFooter: {
-    marginTop: 6,
+    marginTop: 8,
   },
   address: {
     fontSize: 12,
-    color: '#aaa',
+    color: '#8B7E6D',
   },
   cardBottomRow: {
     flexDirection: 'row',
@@ -269,13 +336,13 @@ const styles = StyleSheet.create( {
   },
   score: {
     fontSize: 13,
-    color: '#fa8c16',
-    fontWeight: '500',
+    color: '#B66A23',
+    fontWeight: '700',
   },
   price: {
-    fontSize: 14,
-    color: '#f5222d',
-    fontWeight: '700',
+    fontSize: 16,
+    color: '#A6402B',
+    fontWeight: '800',
   },
   footer: {
     paddingVertical: 16,
@@ -283,7 +350,7 @@ const styles = StyleSheet.create( {
   },
   footerText: {
     fontSize: 13,
-    color: '#bbb',
+    color: '#AA9A83',
   },
   empty: {
     paddingTop: 100,
@@ -295,50 +362,54 @@ const styles = StyleSheet.create( {
   },
   emptyText: {
     fontSize: 15,
-    color: '#bbb',
+    color: '#AA9A83',
   },
   noteEntry: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFDF8',
     marginHorizontal: 16,
-    marginTop: 12,
-    padding: 12,
-    borderRadius: 14,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 1,
+    marginTop: 14,
+    padding: 14,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 2,
   },
   noteEntryIcon: {
     width: 44,
     height: 44,
-    borderRadius: 12,
-    backgroundColor: '#e6f4ff',
+    borderRadius: 22,
+    backgroundColor: '#B84B35',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   noteEntryIconText: {
-    fontSize: 22,
+    fontSize: 18,
+    color: '#FFF9EE',
+    fontWeight: '800',
   },
   noteEntryTextWrap: {
     flex: 1,
   },
   noteEntryTitle: {
-    fontSize: 15,
-    color: '#1a1a1a',
-    fontWeight: '600',
+    fontSize: 16,
+    color: '#2A241D',
+    fontWeight: '800',
   },
   noteEntrySubtitle: {
     fontSize: 12,
-    color: '#999',
-    marginTop: 2,
+    color: '#817361',
+    marginTop: 3,
   },
   noteEntryArrow: {
-    fontSize: 22,
-    color: '#ccc',
+    fontSize: 24,
+    color: '#B84B35',
     marginLeft: 4,
   },
 } )

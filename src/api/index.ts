@@ -13,7 +13,7 @@ request.interceptors.request.use(
 
       const token = await AsyncStorage.getItem( 'token' )
       if ( token ) {
-        config.headers[ 'satoken' ] = token
+        config.headers.satoken = token
       }
 
       return config

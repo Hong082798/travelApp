@@ -110,7 +110,7 @@ export default function EntertainmentScreen() {
     if ( loading && data.length > 0 ) {
       return (
           <View style = { styles.footer }>
-            <ActivityIndicator size = "small" color = "#1890ff" />
+            <ActivityIndicator size = "small" color = "#1F5C43" />
           </View>
       );
     }
@@ -210,8 +210,11 @@ export default function EntertainmentScreen() {
   return (
       <SafeAreaView style = { styles.container }>
         <View style = { styles.header }>
-          <Text style = { styles.headerTitle }>玩乐</Text>
-          <Text style = { styles.headerSubtitle }>周边好去处，随时安排</Text>
+          <View style = { styles.hero }>
+            <Text style = { styles.heroEyebrow }>LOCAL EXPERIENCE</Text>
+            <Text style = { styles.headerTitle }>在地玩乐</Text>
+            <Text style = { styles.headerSubtitle }>茶馆、演艺、夜游和亲子体验，按心情出发</Text>
+          </View>
         </View>
 
         { renderCategoryTabs() }
@@ -225,7 +228,7 @@ export default function EntertainmentScreen() {
               <RefreshControl
                   refreshing = { refreshing }
                   onRefresh = { handleRefresh }
-                  tintColor = "#1890ff"
+                  tintColor = "#1F5C43"
               />
             }
             onEndReached = { handleLoadMore }
@@ -247,26 +250,44 @@ export default function EntertainmentScreen() {
 const styles = StyleSheet.create( {
   container: {
     flex: 1,
-    backgroundColor: '#f5f6f8',
+    backgroundColor: '#F6F1E8',
   },
   header: {
     paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 4,
+    paddingTop: 10,
+    paddingBottom: 2,
+  },
+  hero: {
+    backgroundColor: '#5C2F25',
+    borderRadius: 24,
+    padding: 20,
+    shadowColor: '#5C2F25',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.16,
+    shadowRadius: 18,
+    elevation: 4,
+  },
+  heroEyebrow: {
+    fontSize: 11,
+    color: '#E9C77D',
+    fontWeight: '700',
+    letterSpacing: 0,
+    marginBottom: 8,
   },
   headerTitle: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#1a1a1a',
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#FFF9EE',
   },
   headerSubtitle: {
-    fontSize: 13,
-    color: '#999',
-    marginTop: 2,
+    fontSize: 14,
+    color: '#EAD9C6',
+    marginTop: 6,
+    lineHeight: 21,
   },
   tabsWrap: {
-    backgroundColor: '#fff',
-    marginTop: 10,
+    backgroundColor: 'transparent',
+    marginTop: 12,
   },
   tabsList: {
     paddingHorizontal: 16,
@@ -274,48 +295,56 @@ const styles = StyleSheet.create( {
   },
   tabChip: {
     paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderRadius: 16,
-    backgroundColor: '#f5f6f8',
+    paddingVertical: 8,
+    borderRadius: 18,
+    backgroundColor: '#FFFDF8',
     marginRight: 8,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
   },
   tabChipActive: {
-    backgroundColor: '#1890ff',
+    backgroundColor: '#1F5C43',
+    borderColor: '#1F5C43',
   },
   tabChipText: {
     fontSize: 13,
-    color: '#666',
+    color: '#7B6B58',
+    fontWeight: '600',
   },
   tabChipTextActive: {
-    color: '#fff',
-    fontWeight: '600',
+    color: '#FFF9EE',
+    fontWeight: '800',
   },
   list: {
     padding: 16,
-    paddingTop: 12,
+    paddingTop: 8,
+    paddingBottom: 24,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 14,
-    marginBottom: 14,
+    backgroundColor: '#FFFDF8',
+    borderRadius: 18,
+    marginBottom: 16,
     flexDirection: 'row',
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#E9DDC8',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.09,
+    shadowRadius: 16,
+    elevation: 3,
   },
   cardImageWrap: {
-    width: 108,
-    height: 132,
+    width: 124,
+    height: 150,
+    backgroundColor: '#D8C9AB',
   },
   cardImage: {
     width: '100%',
     height: '100%',
   },
   cardImagePlaceholder: {
-    backgroundColor: '#eef1f5',
+    backgroundColor: '#E8DDC6',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -326,37 +355,37 @@ const styles = StyleSheet.create( {
     position: 'absolute',
     left: 8,
     top: 8,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    backgroundColor: 'rgba(92,47,37,0.9)',
+    borderRadius: 12,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
     maxWidth: '80%',
   },
   badgeText: {
     fontSize: 11,
-    color: '#fff',
-    fontWeight: '500',
+    color: '#FFF9EE',
+    fontWeight: '700',
   },
   cardBody: {
     flex: 1,
-    padding: 12,
+    padding: 14,
     justifyContent: 'space-between',
   },
   cardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
+    fontSize: 17,
+    fontWeight: '800',
+    color: '#2A241D',
   },
   cardDesc: {
     fontSize: 13,
-    color: '#888',
-    lineHeight: 18,
-    marginTop: 4,
+    color: '#756B5E',
+    lineHeight: 19,
+    marginTop: 5,
   },
   address: {
     fontSize: 12,
-    color: '#aaa',
-    marginTop: 6,
+    color: '#8B7E6D',
+    marginTop: 8,
   },
   cardBottomRow: {
     flexDirection: 'row',
@@ -366,13 +395,13 @@ const styles = StyleSheet.create( {
   },
   score: {
     fontSize: 13,
-    color: '#fa8c16',
-    fontWeight: '500',
+    color: '#B66A23',
+    fontWeight: '700',
   },
   price: {
-    fontSize: 14,
-    color: '#f5222d',
-    fontWeight: '700',
+    fontSize: 16,
+    color: '#A6402B',
+    fontWeight: '800',
   },
   footer: {
     paddingVertical: 16,
@@ -380,7 +409,7 @@ const styles = StyleSheet.create( {
   },
   footerText: {
     fontSize: 13,
-    color: '#bbb',
+    color: '#AA9A83',
   },
   empty: {
     paddingTop: 100,
@@ -392,6 +421,6 @@ const styles = StyleSheet.create( {
   },
   emptyText: {
     fontSize: 15,
-    color: '#bbb',
+    color: '#AA9A83',
   },
 } );

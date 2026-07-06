@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
+import { Text, StyleSheet, SafeAreaView } from 'react-native'
 
 export default function PlaceholderScreen() {
   return (
@@ -12,8 +12,8 @@ export default function PlaceholderScreen() {
 }
 
 const styles = StyleSheet.create( {
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5' },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F6F1E8' },
   emoji: { fontSize: 48, marginBottom: 16 },
-  title: { fontSize: 20, fontWeight: 'bold', color: '#1a1a1a', marginBottom: 8 },
-  subtitle: { fontSize: 14, color: '#999' },
+  title: { fontSize: 20, fontWeight: '800', color: '#2A241D', marginBottom: 8 },
+  subtitle: { fontSize: 14, color: '#817361' },
 } )

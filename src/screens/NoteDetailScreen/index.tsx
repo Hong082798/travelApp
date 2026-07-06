@@ -6,7 +6,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
-  SafeAreaView
+  SafeAreaView,
+  Image
 
 } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -40,12 +41,12 @@ export default function NoteDetailScreen( { route, navigation }: Props ) {
       }
     }
     fetchDetail()
-  }, [ id ] );
+  }, [ id, navigation ] );
 
   if ( loading ) {
     return (
         <View style = { styles.center }>
-          <ActivityIndicator size = "large" color = "#1890ff" />
+          <ActivityIndicator size = "large" color = "#1F5C43" />
         </View>
     )
   }
@@ -99,10 +100,16 @@ export default function NoteDetailScreen( { route, navigation }: Props ) {
   }
 
   return (
-      <SafeAreaView style = { { flex: 1 } }>
+      <SafeAreaView style = { styles.safeArea }>
         <ScrollView style = { styles.container }>
+          { detail.coverImage ? (
+              <Image source = { { uri: detail.coverImage } } style = { styles.cover } />
+          ) : (
+              <View style = { [ styles.cover, styles.coverPlaceholder ] }>
+                <Text style = { styles.coverPlaceholderText }>游记</Text>
+              </View>
+          ) }
 
-          {/* 标题 */ }
           <View style = { styles.header }>
             <Text style = { styles.title }>{ detail.title }</Text>
           </View>
@@ -110,9 +117,13 @@ export default function NoteDetailScreen( { route, navigation }: Props ) {
           {/* 作者信息 */ }
           <View style = { styles.authorCard }>
             <View style = { styles.avatar }>
-              <Text style = { styles.avatarText }>
-                { detail.authorNickname?.charAt( 0 ) ?? '?' }
-              </Text>
+              { detail.authorAvatar ? (
+                  <Image source = { { uri: detail.authorAvatar } } style = { styles.avatarImage } />
+              ) : (
+                  <Text style = { styles.avatarText }>
+                    { detail.authorNickname?.charAt( 0 ) ?? '?' }
+                  </Text>
+              ) }
             </View>
             <View style = { styles.authorInfo }>
               <TouchableOpacity
@@ -151,9 +162,13 @@ export default function NoteDetailScreen( { route, navigation }: Props ) {
 }
 
 const styles = StyleSheet.create( {
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F6F1E8',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F6F1E8',
   },
   center: {
     flex: 1,
@@ -162,69 +177,102 @@ const styles = StyleSheet.create( {
   },
   errorText: {
     fontSize: 15,
-    color: '#999',
+    color: '#8B7E6D',
+  },
+  cover: {
+    width: '100%',
+    height: 250,
+    backgroundColor: '#D8C9AB',
+  },
+  coverPlaceholder: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  coverPlaceholderText: {
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#1F5C43',
   },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFDF8',
     padding: 20,
     paddingBottom: 16,
+    marginHorizontal: 16,
+    marginTop: -28,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
+    borderBottomWidth: 0,
   },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#2A241D',
     lineHeight: 32,
   },
   authorCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFDF8',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 14,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
+    borderTopWidth: 0,
+    marginHorizontal: 16,
     marginBottom: 12,
+    borderBottomLeftRadius: 22,
+    borderBottomRightRadius: 22,
   },
   avatar: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#1890ff',
+    backgroundColor: '#B84B35',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
+    overflow: 'hidden',
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
   },
   avatarText: {
     color: '#fff',
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '800',
   },
   authorInfo: {
     flex: 1,
   },
   nickname: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#1a1a1a',
+    fontWeight: '800',
+    color: '#2A241D',
   },
   date: {
     fontSize: 12,
-    color: '#bbb',
+    color: '#AA9A83',
     marginTop: 2,
   },
   likeCount: {
     fontSize: 14,
-    color: '#999',
+    color: '#8B7E6D',
   },
   contentCard: {
-    backgroundColor: '#fff',
-    marginHorizontal: 0,
+    backgroundColor: '#FFFDF8',
+    marginHorizontal: 16,
+    borderRadius: 18,
     padding: 20,
     minHeight: 200,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
   },
   content: {
     fontSize: 16,
-    color: '#333',
+    color: '#3D352D',
     lineHeight: 28,
   },
   likeBtn: { flexDirection: 'row', alignItems: 'center' },

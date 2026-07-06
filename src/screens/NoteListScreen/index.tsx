@@ -86,6 +86,7 @@ export default function NoteListScreen() {
 
   useEffect( () => {
     fetchData( 1, true )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ activeTab ] )
 
   const handleRefresh = () => {
@@ -104,7 +105,7 @@ export default function NoteListScreen() {
     if ( loading && data.length > 0 ) {
       return (
           <View style = { styles.footer }>
-            <ActivityIndicator size = "small" color = "#1890ff" />
+            <ActivityIndicator size = "small" color = "#1F5C43" />
           </View>
       )
     }
@@ -160,8 +161,12 @@ export default function NoteListScreen() {
 
   return (
       <SafeAreaView style = { styles.container }>
+        <View style = { styles.header }>
+          <Text style = { styles.headerEyebrow }>TRAVEL NOTES</Text>
+          <Text style = { styles.headerTitle }>旅人手记</Text>
+          <Text style = { styles.headerSubtitle }>看真实路线、花费和沿途故事</Text>
+        </View>
 
-        {/* 顶部切换标签 */ }
         <View style = { styles.tabBar }>
           <TouchableOpacity
               style = { styles.tabItem }
@@ -192,7 +197,7 @@ export default function NoteListScreen() {
             columnWrapperStyle = { styles.columnWrapper }
             contentContainerStyle = { styles.list }
             refreshControl = {
-              <RefreshControl refreshing = { refreshing } onRefresh = { handleRefresh } tintColor = "#1890ff" />
+              <RefreshControl refreshing = { refreshing } onRefresh = { handleRefresh } tintColor = "#1F5C43" />
             }
             onEndReached = { handleLoadMore }
             onEndReachedThreshold = { 0.2 }
@@ -213,24 +218,50 @@ export default function NoteListScreen() {
 }
 
 const styles = StyleSheet.create( {
-  container: { flex: 1, backgroundColor: '#f5f6f8' },
+  container: { flex: 1, backgroundColor: '#F6F1E8' },
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    paddingBottom: 12,
+  },
+  headerEyebrow: {
+    color: '#B84B35',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0,
+    marginBottom: 6,
+  },
+  headerTitle: {
+    color: '#2A241D',
+    fontSize: 28,
+    fontWeight: '800',
+  },
+  headerSubtitle: {
+    color: '#817361',
+    fontSize: 13,
+    marginTop: 5,
+  },
   list: {
     padding: GRID_GAP,
+    paddingTop: 14,
+    paddingBottom: 24,
   },
   columnWrapper: {
     justifyContent: 'space-between',
   },
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    backgroundColor: '#FFFDF8',
+    borderRadius: 16,
     marginBottom: GRID_GAP,
     padding: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#E9DDC8',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 2,
   },
   imageWrap: {
     width: '100%',
@@ -244,7 +275,7 @@ const styles = StyleSheet.create( {
     height: '100%',
   },
   coverPlaceholder: {
-    backgroundColor: '#eef1f5',
+    backgroundColor: '#E8DDC6',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -255,10 +286,10 @@ const styles = StyleSheet.create( {
     position: 'absolute',
     right: 6,
     bottom: 6,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    borderRadius: 10,
-    paddingHorizontal: 7,
-    paddingVertical: 3,
+    backgroundColor: 'rgba(92,47,37,0.88)',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   likeOverlayText: {
     fontSize: 11,
@@ -267,8 +298,8 @@ const styles = StyleSheet.create( {
   },
   title: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#1a1a1a',
+    fontWeight: '800',
+    color: '#2A241D',
     lineHeight: 19,
     marginBottom: 8,
     paddingHorizontal: 2,
@@ -282,7 +313,7 @@ const styles = StyleSheet.create( {
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#1890ff',
+    backgroundColor: '#1F5C43',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 6,
@@ -299,12 +330,12 @@ const styles = StyleSheet.create( {
   },
   nickname: {
     fontSize: 12,
-    color: '#666',
+    color: '#6F6356',
     flex: 1,
   },
   date: {
     fontSize: 11,
-    color: '#bbb',
+    color: '#AA9A83',
   },
   footer: {
     paddingVertical: 16,
@@ -312,7 +343,7 @@ const styles = StyleSheet.create( {
   },
   footerText: {
     fontSize: 13,
-    color: '#bbb',
+    color: '#AA9A83',
   },
   empty: {
     width: '100%',
@@ -325,32 +356,37 @@ const styles = StyleSheet.create( {
   },
   emptyText: {
     fontSize: 15,
-    color: '#bbb',
+    color: '#AA9A83',
   },
   tabBar: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    backgroundColor: '#FFFDF8',
+    marginHorizontal: 16,
+    borderRadius: 18,
+    padding: 4,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
   },
   tabItem: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 10,
+    borderRadius: 14,
   },
   tabText: {
     fontSize: 15,
-    color: '#999',
+    color: '#8B7E6D',
+    fontWeight: '700',
   },
   tabTextActive: {
-    color: '#1890ff',
-    fontWeight: '600',
+    color: '#1F5C43',
+    fontWeight: '800',
   },
   tabIndicator: {
-    marginTop: 6,
-    width: 24,
+    marginTop: 5,
+    width: 22,
     height: 3,
     borderRadius: 2,
-    backgroundColor: '#1890ff',
+    backgroundColor: '#B84B35',
   },
 } )

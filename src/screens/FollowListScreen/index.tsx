@@ -40,7 +40,7 @@ export default function FollowListScreen( { route, navigation }: Props ) {
   if ( loading ) {
     return (
         <View style = { styles.center }>
-          <ActivityIndicator size = "large" color = "#1890ff" />
+          <ActivityIndicator size = "large" color = "#1F5C43" />
         </View>
     )
   }
@@ -84,27 +84,29 @@ export default function FollowListScreen( { route, navigation }: Props ) {
                 <Text style = { styles.arrow }>›</Text>
               </TouchableOpacity>
           ) }
-          ItemSeparatorComponent = { () => <View style = { styles.divider } /> }
+          ItemSeparatorComponent = { FollowListSeparator }
       />
   )
 }
+
+const FollowListSeparator = () => <View style = { styles.divider } />
+
 const styles = StyleSheet.create( {
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#F6F1E8' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  emptyText: { fontSize: 15, color: '#999' },
+  emptyText: { fontSize: 15, color: '#8B7E6D' },
   item: {
     flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#fff', paddingHorizontal: 16, paddingVertical: 12,
+    backgroundColor: '#FFFDF8', paddingHorizontal: 16, paddingVertical: 14,
   },
   avatar: {
-    width: 44, height: 44, borderRadius: 22, backgroundColor: '#1890ff',
+    width: 44, height: 44, borderRadius: 22, backgroundColor: '#1F5C43',
     justifyContent: 'center', alignItems: 'center', marginRight: 12,
   },
-  avatarText: { color: '#fff', fontSize: 18, fontWeight: '600' },
+  avatarText: { color: '#fff', fontSize: 18, fontWeight: '800' },
   info: { flex: 1 },
-  nickname: { fontSize: 15, fontWeight: '600', color: '#1a1a1a' },
-  date: { fontSize: 12, color: '#bbb', marginTop: 2 },
-  arrow: { fontSize: 20, color: '#ccc' },
-  divider: { height: 1, backgroundColor: '#f0f0f0' },
+  nickname: { fontSize: 15, fontWeight: '800', color: '#2A241D' },
+  date: { fontSize: 12, color: '#AA9A83', marginTop: 2 },
+  arrow: { fontSize: 20, color: '#B84B35' },
+  divider: { height: 1, backgroundColor: '#E8DDC6' },
 } )
-

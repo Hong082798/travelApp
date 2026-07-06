@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import {
   View,
   Text,
+  Image,
   ScrollView,
   StyleSheet,
   ActivityIndicator,
@@ -108,17 +109,17 @@ export default function ScenicDetailScreen( { route, navigation }: Props ) {
   }, [ favoriteLoading, favorited, id ] )
 
   const renderFavoriteButton = useCallback( () => (
-          <TouchableOpacity
-              onPress = { handleFavorite }
-              disabled = { favoriteLoading }
-              style = { styles.favoriteButton }
-              accessibilityRole = "button"
-              accessibilityLabel = { favorited ? '取消收藏景点' : '收藏景点' }
-          >
-            <Text style = { [ styles.favoriteText, favoriteLoading && styles.favoriteTextLoading ] }>
-              { favorited ? '⭐' : '☆' }
-            </Text>
-          </TouchableOpacity>
+      <TouchableOpacity
+          onPress = { handleFavorite }
+          disabled = { favoriteLoading }
+          style = { styles.favoriteButton }
+          accessibilityRole = "button"
+          accessibilityLabel = { favorited ? '取消收藏景点' : '收藏景点' }
+      >
+        <Text style = { [ styles.favoriteText, favoriteLoading && styles.favoriteTextLoading ] }>
+          { favorited ? '⭐' : '☆' }
+        </Text>
+      </TouchableOpacity>
   ), [ favoriteLoading, favorited, handleFavorite ] )
 
   useLayoutEffect( () => {
@@ -130,9 +131,18 @@ export default function ScenicDetailScreen( { route, navigation }: Props ) {
   if ( loading ) {
     return (
         <View style = { styles.center }>
-          <ActivityIndicator size = "large" color = "#1890ff" />
+          <ActivityIndicator size = "large" color = "#1F5C43" />
         </View>
     )
+  }
+
+  const handleBooking = () => {
+    if ( !detail ) return
+    navigation.navigate( 'BookingSlotSelect', {
+      targetType: 'SCENIC',
+      targetId: id,
+      targetName: detail.name
+    } )
   }
 
   if ( !detail ) {
@@ -145,62 +155,88 @@ export default function ScenicDetailScreen( { route, navigation }: Props ) {
 
   // HTML
   return (
-      <ScrollView style = { styles.container }>
+      <View style = { styles.page }>
+        <ScrollView style = { styles.container }>
+          { detail.coverImage ? (
+              <Image source = { { uri: detail.coverImage } } style = { styles.cover } />
+          ) : (
+              <View style = { [ styles.cover, styles.coverPlaceholder ] }>
+                <Text style = { styles.coverPlaceholderText }>山河</Text>
+              </View>
+          ) }
 
-        {/* 基本信息卡片 */ }
-        <View style = { styles.card }>
-          <View style = { styles.titleRow }>
-            <Text style = { styles.name }>{ detail.name }</Text>
-            <View style = { styles.badge }>
-              <Text style = { styles.badgeText }>{ categoryName }</Text>
+          <View style = { styles.heroCard }>
+            <View style = { styles.titleRow }>
+              <Text style = { styles.name }>{ detail.name }</Text>
+              <View style = { styles.badge }>
+                <Text style = { styles.badgeText }>{ categoryName }</Text>
+              </View>
+            </View>
+            <View style = { styles.quickRow }>
+              <View style = { styles.quickItem }>
+                <Text style = { styles.quickValue }>{ detail.score } 分</Text>
+                <Text style = { styles.quickLabel }>游客评分</Text>
+              </View>
+              <View style = { styles.quickItem }>
+                <Text style = { styles.quickValue }>
+                  { Number( detail.ticketPrice ) === 0 ? '免费' : `¥${ detail.ticketPrice }` }
+                </Text>
+                <Text style = { styles.quickLabel }>门票参考</Text>
+              </View>
+            </View>
+            <Text style = { styles.description }>{ detail.description }</Text>
+          </View>
+
+          <View style = { styles.card }>
+            <Text style = { styles.sectionTitle }>景点信息</Text>
+
+            <View style = { styles.infoRow }>
+              <Text style = { styles.infoLabel }>📍 地址</Text>
+              <Text style = { styles.infoValue }>{ detail.address }</Text>
+            </View>
+
+            <View style = { styles.divider } />
+
+            <View style = { styles.infoRow }>
+              <Text style = { styles.infoLabel }>⭐ 评分</Text>
+              <Text style = { [ styles.infoValue, styles.scoreText ] }>{ detail.score } 分</Text>
+            </View>
+
+            <View style = { styles.divider } />
+
+            <View style = { styles.infoRow }>
+              <Text style = { styles.infoLabel }>🎫 门票</Text>
+              <Text style = { [ styles.infoValue, styles.priceText ] }>
+                { Number( detail.ticketPrice ) === 0 ? '免费' : `¥${ detail.ticketPrice }` }
+              </Text>
+            </View>
+
+            <View style = { styles.divider } />
+
+            <View style = { styles.infoRow }>
+              <Text style = { styles.infoLabel }>🗺️ 坐标</Text>
+              <Text style = { styles.infoValue }>
+                { detail.longitude }, { detail.latitude }
+              </Text>
             </View>
           </View>
-          <Text style = { styles.description }>{ detail.description }</Text>
-        </View>
 
-        {/* 详细信息卡片 */ }
-        <View style = { styles.card }>
-          <Text style = { styles.sectionTitle }>景点信息</Text>
-
-          <View style = { styles.infoRow }>
-            <Text style = { styles.infoLabel }>📍 地址</Text>
-            <Text style = { styles.infoValue }>{ detail.address }</Text>
-          </View>
-
-          <View style = { styles.divider } />
-
-          <View style = { styles.infoRow }>
-            <Text style = { styles.infoLabel }>⭐ 评分</Text>
-            <Text style = { [ styles.infoValue, styles.scoreText ] }>{ detail.score } 分</Text>
-          </View>
-
-          <View style = { styles.divider } />
-
-          <View style = { styles.infoRow }>
-            <Text style = { styles.infoLabel }>🎫 门票</Text>
-            <Text style = { [ styles.infoValue, styles.priceText ] }>
-              { Number( detail.ticketPrice ) === 0 ? '免费' : `¥${ detail.ticketPrice }` }
-            </Text>
-          </View>
-
-          <View style = { styles.divider } />
-
-          <View style = { styles.infoRow }>
-            <Text style = { styles.infoLabel }>🗺️ 坐标</Text>
-            <Text style = { styles.infoValue }>
-              { detail.longitude }, { detail.latitude }
-            </Text>
-          </View>
-        </View>
-
-      </ScrollView>
+        </ScrollView>
+        <TouchableOpacity style = { styles.bookingButton } onPress = { handleBooking }>
+          <Text style = { styles.bookingButtonText }>预约参观</Text>
+        </TouchableOpacity>
+      </View>
   )
 }
 
 const styles = StyleSheet.create( {
+  page: {
+    flex: 1,
+    backgroundColor: '#F6F1E8',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F6F1E8',
   },
   center: {
     flex: 1,
@@ -209,7 +245,7 @@ const styles = StyleSheet.create( {
   },
   errorText: {
     fontSize: 15,
-    color: '#999',
+    color: '#8B7E6D',
   },
   favoriteButton: {
     marginRight: 8,
@@ -222,16 +258,46 @@ const styles = StyleSheet.create( {
     opacity: 0.45,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    backgroundColor: '#FFFDF8',
+    borderRadius: 18,
     padding: 16,
     margin: 16,
     marginBottom: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
     elevation: 2,
+  },
+  cover: {
+    width: '100%',
+    height: 260,
+    backgroundColor: '#D8C9AB',
+  },
+  coverPlaceholder: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  coverPlaceholderText: {
+    color: '#1F5C43',
+    fontSize: 30,
+    fontWeight: '800',
+  },
+  heroCard: {
+    backgroundColor: '#FFFDF8',
+    borderRadius: 22,
+    padding: 18,
+    marginHorizontal: 16,
+    marginTop: -34,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 4,
   },
   titleRow: {
     flexDirection: 'row',
@@ -240,31 +306,53 @@ const styles = StyleSheet.create( {
     marginBottom: 12,
   },
   name: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#2A241D',
     flex: 1,
     marginRight: 8,
   },
   badge: {
-    backgroundColor: '#e6f4ff',
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
+    backgroundColor: '#1F5C43',
+    borderRadius: 14,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   badgeText: {
     fontSize: 12,
-    color: '#1890ff',
+    color: '#FFF9EE',
+    fontWeight: '700',
+  },
+  quickRow: {
+    flexDirection: 'row',
+    marginBottom: 14,
+    gap: 10,
+  },
+  quickItem: {
+    flex: 1,
+    backgroundColor: '#F6F1E8',
+    borderRadius: 14,
+    padding: 12,
+  },
+  quickValue: {
+    color: '#A6402B',
+    fontSize: 17,
+    fontWeight: '800',
+  },
+  quickLabel: {
+    color: '#817361',
+    fontSize: 12,
+    marginTop: 4,
   },
   description: {
     fontSize: 15,
-    color: '#555',
-    lineHeight: 24,
+    color: '#5F5448',
+    lineHeight: 25,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
+    fontWeight: '800',
+    color: '#2A241D',
     marginBottom: 12,
   },
   infoRow: {
@@ -274,24 +362,45 @@ const styles = StyleSheet.create( {
   },
   infoLabel: {
     fontSize: 14,
-    color: '#999',
+    color: '#8B7E6D',
     width: 80,
   },
   infoValue: {
     fontSize: 14,
-    color: '#333',
+    color: '#3D352D',
     flex: 1,
   },
   scoreText: {
-    color: '#fa8c16',
-    fontWeight: '600',
+    color: '#B66A23',
+    fontWeight: '800',
   },
   priceText: {
-    color: '#f5222d',
-    fontWeight: '600',
+    color: '#A6402B',
+    fontWeight: '800',
   },
   divider: {
     height: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#EFE5D2',
   },
+
+  // 底部预约按钮样式
+  bookingButton: {
+    backgroundColor: '#1F5C43',
+    margin: 16,
+    padding: 14,
+    borderRadius: 16,
+    alignItems: 'center',
+    shadowColor: '#173B2D',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 14,
+    elevation: 4,
+  },
+
+  bookingButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600'
+  }
+
 } )

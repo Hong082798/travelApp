@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../navigation'
 import { checkFollow, followUser, unfollowUser, getFollowCount } from '../../api/follow'
@@ -22,7 +22,7 @@ export default function UserProfileScreen( { route, navigation }: Props ) {
     // 判断是不是自己
     const checkSelf = async () => {
       const myId = await AsyncStorage.getItem( 'userId' )
-      if ( myId && parseInt( myId ) === userId ) {
+      if ( myId && parseInt( myId, 10 ) === userId ) {
         setIsSelf( true )
         setFollowLoading( false ) // 如果是自己，不需要check
       }
@@ -59,7 +59,7 @@ export default function UserProfileScreen( { route, navigation }: Props ) {
     checkSelf()
     fetchCount()
 
-  }, [ userId ] );
+  }, [ navigation, nickname, userId ] );
 
   const handleFollow = async () => {
     if ( followLoading ) return
@@ -136,22 +136,34 @@ export default function UserProfileScreen( { route, navigation }: Props ) {
 }
 
 const styles = StyleSheet.create( {
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
-  header: { backgroundColor: '#fff', alignItems: 'center', paddingVertical: 24 },
+  container: { flex: 1, backgroundColor: '#F6F1E8', padding: 16 },
+  header: {
+    backgroundColor: '#FFFDF8',
+    alignItems: 'center',
+    paddingVertical: 28,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 3,
+  },
   avatar: {
-    width: 64, height: 64, borderRadius: 32, backgroundColor: '#1890ff',
+    width: 64, height: 64, borderRadius: 32, backgroundColor: '#B84B35',
     justifyContent: 'center', alignItems: 'center', marginBottom: 12,
   },
-  avatarText: { color: '#fff', fontSize: 28, fontWeight: '600' },
-  nickname: { fontSize: 18, fontWeight: 'bold', color: '#1a1a1a', marginBottom: 16 },
+  avatarText: { color: '#fff', fontSize: 28, fontWeight: '800' },
+  nickname: { fontSize: 19, fontWeight: '800', color: '#2A241D', marginBottom: 16 },
   countRow: { flexDirection: 'row', marginBottom: 16 },
   countItem: { alignItems: 'center', marginHorizontal: 24 },
-  countNum: { fontSize: 18, fontWeight: 'bold', color: '#1a1a1a' },
-  countLabel: { fontSize: 13, color: '#999', marginTop: 2 },
+  countNum: { fontSize: 18, fontWeight: '800', color: '#1F5C43' },
+  countLabel: { fontSize: 13, color: '#817361', marginTop: 2 },
   followBtn: {
-    backgroundColor: '#1890ff', paddingHorizontal: 32, paddingVertical: 8, borderRadius: 20,
+    backgroundColor: '#1F5C43', paddingHorizontal: 32, paddingVertical: 9, borderRadius: 20,
   },
-  followedBtn: { backgroundColor: '#f0f0f0' },
-  followBtnText: { color: '#fff', fontSize: 15, fontWeight: '600' },
-  followedBtnText: { color: '#999' },
+  followedBtn: { backgroundColor: '#EFE5D2' },
+  followBtnText: { color: '#fff', fontSize: 15, fontWeight: '800' },
+  followedBtnText: { color: '#6F6356' },
 } )

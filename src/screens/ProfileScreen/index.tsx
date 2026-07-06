@@ -57,7 +57,7 @@ export default function ProfileScreen() {
   if ( loading ) {
     return (
         <View style = { styles.center }>
-          <ActivityIndicator size = "large" color = "#1890ff" />
+          <ActivityIndicator size = "large" color = "#1F5C43" />
         </View>
     )
   }
@@ -65,8 +65,10 @@ export default function ProfileScreen() {
   return (
       <SafeAreaView style = { styles.container }>
         <ScrollView showsVerticalScrollIndicator = { false }>
-          {/* 头部横幅 */ }
-          <View style = { styles.banner } />
+          <View style = { styles.banner }>
+            <Text style = { styles.bannerEyebrow }>MY JOURNEY</Text>
+            <Text style = { styles.bannerTitle }>我的旅程</Text>
+          </View>
 
           {/* 头像 + 昵称 + 数据卡片 */ }
           <View style = { styles.headerCard }>
@@ -127,6 +129,18 @@ export default function ProfileScreen() {
 
             <TouchableOpacity
                 style = { styles.menuItem }
+                onPress = { () => navigation.navigate( 'MyBookings' ) }
+                activeOpacity = { 0.7 }
+            >
+              <Text style = { styles.menuIcon }>🎟️</Text>
+              <Text style = { styles.menuLabel }>我的预订</Text>
+              <Text style = { styles.menuArrow }>›</Text>
+            </TouchableOpacity>
+
+            <View style = { styles.menuDivider } />
+
+            <TouchableOpacity
+                style = { styles.menuItem }
                 onPress = { () => handleComingSoon( '我的收藏' ) }
                 activeOpacity = { 0.7 }
             >
@@ -159,50 +173,68 @@ export default function ProfileScreen() {
   )
 }
 const styles = StyleSheet.create( {
-  container: { flex: 1, backgroundColor: '#f5f6f8' },
+  container: { flex: 1, backgroundColor: '#F6F1E8' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   banner: {
     position: 'absolute',
     top: 0, left: 0, right: 0,
-    height: 140,
-    backgroundColor: '#1890ff',
+    height: 170,
+    backgroundColor: '#1F5C43',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  bannerEyebrow: {
+    color: '#D9C79B',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  bannerTitle: {
+    color: '#FFF9EE',
+    fontSize: 28,
+    fontWeight: '800',
+    marginTop: 6,
   },
   headerCard: {
     alignItems: 'center',
     marginHorizontal: 16,
-    marginTop: 56,
-    backgroundColor: '#fff',
-    borderRadius: 16,
+    marginTop: 82,
+    backgroundColor: '#FFFDF8',
+    borderRadius: 22,
     paddingTop: 44,
     paddingBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 4,
   },
   avatar: {
     position: 'absolute',
     top: -40,
-    width: 80, height: 80, borderRadius: 40, backgroundColor: '#1890ff',
+    width: 80, height: 80, borderRadius: 40, backgroundColor: '#B84B35',
     justifyContent: 'center', alignItems: 'center',
-    borderWidth: 4, borderColor: '#fff',
+    borderWidth: 4, borderColor: '#FFFDF8',
     overflow: 'hidden',
   },
   avatarImage: { width: '100%', height: '100%' },
-  avatarText: { color: '#fff', fontSize: 32, fontWeight: '600' },
-  nickname: { fontSize: 18, fontWeight: 'bold', color: '#1a1a1a', marginBottom: 16 },
+  avatarText: { color: '#fff', fontSize: 32, fontWeight: '800' },
+  nickname: { fontSize: 19, fontWeight: '800', color: '#2A241D', marginBottom: 16 },
   countRow: { flexDirection: 'row', alignItems: 'center' },
   countItem: { alignItems: 'center', paddingHorizontal: 28 },
-  countDivider: { width: 1, height: 24, backgroundColor: '#eee' },
-  countNum: { fontSize: 18, fontWeight: 'bold', color: '#1a1a1a' },
-  countLabel: { fontSize: 13, color: '#999', marginTop: 2 },
+  countDivider: { width: 1, height: 24, backgroundColor: '#E8DDC6' },
+  countNum: { fontSize: 18, fontWeight: '800', color: '#1F5C43' },
+  countLabel: { fontSize: 13, color: '#817361', marginTop: 2 },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFDF8',
     marginHorizontal: 16,
     marginTop: 16,
-    borderRadius: 16,
+    borderRadius: 18,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
   },
   menuItem: {
     flexDirection: 'row',
@@ -217,17 +249,18 @@ const styles = StyleSheet.create( {
   menuLabel: {
     flex: 1,
     fontSize: 15,
-    color: '#1a1a1a',
+    color: '#2A241D',
+    fontWeight: '700',
   },
   menuArrow: {
     fontSize: 20,
-    color: '#ccc',
+    color: '#B84B35',
   },
   menuDivider: {
     height: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#EFE5D2',
     marginLeft: 48,
   },
   logoutBtn: { paddingVertical: 15, alignItems: 'center' },
-  logoutText: { fontSize: 15, color: '#f5222d', fontWeight: '500' },
+  logoutText: { fontSize: 15, color: '#A6402B', fontWeight: '800' },
 } )

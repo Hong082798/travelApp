@@ -60,13 +60,14 @@ export default function LoginScreen() {
           behavior = { Platform.OS === 'ios' ? 'padding' : 'height' }
       >
         <View style = { styles.card }>
+          <Text style = { styles.eyebrow }>CULTURAL TRAVEL</Text>
           <Text style = { styles.title }>文旅平台</Text>
-          <Text style = { styles.subtitle }>发现美好旅途</Text>
+          <Text style = { styles.subtitle }>登录后继续发现山河、人文与在地生活</Text>
 
           <TextInput
               style = { styles.input }
               placeholder = "请输入用户名"
-              placeholderTextColor = "#999"
+              placeholderTextColor = "#AA9A83"
               value = { username }
               onChangeText = { setUsername }
               autoCapitalize = "none"
@@ -75,7 +76,7 @@ export default function LoginScreen() {
           <TextInput
               style = { styles.input }
               placeholder = "请输入密码"
-              placeholderTextColor = "#999"
+              placeholderTextColor = "#AA9A83"
               value = { password }
               onChangeText = { setPassword }
               secureTextEntry
@@ -99,54 +100,65 @@ export default function LoginScreen() {
 const styles = StyleSheet.create( {
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F6F1E8',
     justifyContent: 'center',
     paddingHorizontal: 24,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
+    backgroundColor: '#FFFDF8',
+    borderRadius: 24,
+    padding: 30,
+    borderWidth: 1,
+    borderColor: '#E8DDC6',
+    shadowColor: '#6B4E2E',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
     elevation: 4,
   },
+  eyebrow: {
+    color: '#B84B35',
+    fontSize: 11,
+    fontWeight: '800',
+    textAlign: 'center',
+    letterSpacing: 0,
+    marginBottom: 8,
+  },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#2A241D',
     textAlign: 'center',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 14,
-    color: '#999',
+    color: '#817361',
     textAlign: 'center',
     marginBottom: 32,
+    lineHeight: 20,
   },
   input: {
     height: 48,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderRadius: 8,
+    borderColor: '#E8DDC6',
+    borderRadius: 14,
     paddingHorizontal: 16,
     fontSize: 15,
-    color: '#1a1a1a',
+    color: '#2A241D',
     marginBottom: 16,
-    backgroundColor: '#fafafa',
+    backgroundColor: '#F6F1E8',
   },
   button: {
     height: 48,
-    backgroundColor: '#1890ff',
-    borderRadius: 8,
+    backgroundColor: '#1F5C43',
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
   },
   buttonDisabled: {
-    backgroundColor: '#91caff',
+    backgroundColor: '#9FB8AA',
   },
   buttonText: {
     color: '#fff',

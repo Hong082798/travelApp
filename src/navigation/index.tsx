@@ -11,6 +11,8 @@ import UserProfileScreen from '../screens/UserProfileScreen';
 import MainTabs from './MainTabs';
 import { navigationRef } from './navigationRef';
 import EntertainmentDetailScreen from '../screens/EntertainmentDetailScreen';
+import BookingSlotSelectScreen from '../screens/BookingSlotSelectScreen';
+import MyBookingsScreen from '../screens/MyBookingsScreen';
 
 // 定义路由表的类型
 export type RootStackParamList = {
@@ -20,9 +22,9 @@ export type RootStackParamList = {
   NoteDetail: { id: number };
   UserProfile: { userId: number; nickname: string };
   FollowList: { type: 'following' | 'followers'; title: string };
-  // 新增：玩乐详情页路由类型。组件尚未创建，暂不注册 <Stack.Screen>，
-  // 等模块5的 EntertainmentDetailScreen 写完后回来补注册。
   EntertainmentDetail: { id: number; categoryName: string };
+  BookingSlotSelect: { targetType: string; targetId: number; targetName: string };
+  MyBookings: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -30,7 +32,19 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function Navigation() {
   return (
       <NavigationContainer ref = { navigationRef }>
-        <Stack.Navigator initialRouteName = { 'Login' }>
+        <Stack.Navigator
+            initialRouteName = { 'Login' }
+            screenOptions = { {
+              headerStyle: { backgroundColor: '#FFFDF8' },
+              headerTintColor: '#1F5C43',
+              headerTitleStyle: {
+                color: '#2A241D',
+                fontWeight: '800',
+              },
+              headerShadowVisible: false,
+              contentStyle: { backgroundColor: '#F6F1E8' },
+            } }
+        >
           <Stack.Screen
               name = "Login"
               component = { LoginScreen }
@@ -65,6 +79,16 @@ export default function Navigation() {
               name = "EntertainmentDetail"
               component = { EntertainmentDetailScreen }
               options = { { title: '玩乐详情' } }
+          />
+          <Stack.Screen
+              name = "BookingSlotSelect"
+              component = { BookingSlotSelectScreen }
+              options = { { title: '选择时段' } }
+          />
+          <Stack.Screen
+              name = "MyBookings"
+              component = { MyBookingsScreen }
+              options = { { title: '我的预订' } }
           />
         </Stack.Navigator>
       </NavigationContainer>
